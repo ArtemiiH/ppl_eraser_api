@@ -1,0 +1,8 @@
+Flask
+git+https://github.com/JiahuiYu/neuralgym
+tensorflow==1.15.2
+numpy
+scikit-image
+Pillow
+opencv-python
+PyYAML
