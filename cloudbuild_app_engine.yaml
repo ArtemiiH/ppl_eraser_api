@@ -1,0 +1,24 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/ppl-eraser-api:$COMMIT_SHA"
+      - "--build-arg"
+      - "SEGMENTATION_MODEL_URL=https://storage.googleapis.com/ppl-eraser-static-bucket/api/segmentation_model.hdf5"
+      - "."
+  # Push the container image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/ppl-eraser-api:$COMMIT_SHA"]
+  # Deploy container image to App Engine
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "-q"
+      - "app"
+      - "deploy"
+      - "--image-url"
+      - "gcr.io/$PROJECT_ID/ppl-eraser-api:$COMMIT_SHA"
+images:
+  - "gcr.io/$PROJECT_ID/ppl-eraser-api:$COMMIT_SHA"
+timeout: 960s
